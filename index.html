@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>御祝活力测评</title>
+<style>
+:root{
+  color-scheme: light;
+  --paper:#fff8eb;--paper2:#fff2dc;--ink:#2d2419;--muted:#7c6b5a;
+  --line:rgba(91,69,43,.18);--orange:#e97832;--orange2:#ffb36b;
+  --olive:#6f8f4e;--green:#315f45;--gold:#d6a241;--white:#fffdf8;
+  --shadow:0 20px 50px rgba(88,54,18,.16);--radius:26px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:linear-gradient(165deg,#fff8eb,#fffdf7 45%,#f3ead7);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",Arial,sans-serif;-webkit-text-size-adjust:100%}
+body{display:flex;justify-content:center}
+.phone{width:min(100%,480px);min-height:100vh;position:relative;overflow:hidden;background:radial-gradient(circle at 82% 0%,rgba(233,120,50,.18),transparent 34%),radial-gradient(circle at -12% 22%,rgba(111,143,78,.16),transparent 30%),var(--paper)}
+.screen{min-height:100vh;padding:26px 22px 26px;display:none;flex-direction:column;position:relative;z-index:1}
+.screen.active{display:flex}
+.brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;font-size:14px;color:var(--muted);letter-spacing:.06em}
+.seal{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:#fff3df;font-weight:800;font-size:16px;box-shadow:0 10px 24px rgba(45,36,25,.24)}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:9px 14px;background:rgba(255,253,248,.75);font-weight:700;color:var(--green);font-size:15px}
+h1{font-size:44px;line-height:1.05;letter-spacing:-.05em;margin:20px 0 14px;font-weight:900}
+h2{font-size:27px;line-height:1.2;letter-spacing:-.03em;margin:8px 0 8px;font-weight:900}
+p{font-size:18px;line-height:1.65;color:var(--muted);margin:10px 0}
+.card{background:rgba(255,253,248,.9);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px}
+.hero{margin:14px 0 20px;padding:44px 22px;background:linear-gradient(135deg,var(--orange),var(--green));border-radius:24px;text-align:center;color:#fff}
+.hero .big{font-size:60px;font-weight:950;line-height:.95;letter-spacing:-.04em;margin-bottom:10px}
+.hero .sub{font-size:15px;font-weight:800;letter-spacing:.16em;opacity:.92}
+.cta{margin-top:auto;display:flex;flex-direction:column;gap:12px;padding-top:18px}
+.btn{width:100%;border:0;border-radius:20px;padding:18px 20px;font-size:20px;font-weight:900;color:#fff;background:linear-gradient(135deg,var(--orange),#c65c20);box-shadow:0 14px 28px rgba(233,120,50,.26);cursor:pointer}
+.btn.secondary{background:var(--white);color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn.green{background:linear-gradient(135deg,var(--green),#244b36)}
+.btn:active{transform:translateY(1px)}
+.note{font-size:14px;color:var(--muted);line-height:1.55;text-align:center}
+.progress{height:10px;background:rgba(45,36,25,.08);border-radius:999px;overflow:hidden;margin:6px 0 22px}
+.bar{height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--olive));border-radius:999px;transition:.35s}
+.qtop{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:15px;margin-bottom:6px}
+.tag{font-size:14px;color:var(--green);font-weight:900;letter-spacing:.05em}
+.options{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.option{width:100%;text-align:left;border:1px solid var(--line);background:rgba(255,253,248,.9);border-radius:20px;padding:16px;display:flex;gap:13px;align-items:center;cursor:pointer;box-shadow:0 8px 20px rgba(88,54,18,.06)}
+.option:hover,.option.selected{border-color:rgba(233,120,50,.7);background:#fff7e8}
+.letter{flex:0 0 34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--paper2);color:var(--orange);font-weight:900}
+.option-text{font-size:18px;line-height:1.4;font-weight:750}
+.age-input{width:100%;font-size:30px;font-weight:900;padding:20px;border:2px solid var(--line);border-radius:20px;text-align:center;background:var(--white);color:var(--ink);margin:22px 0}
+.timer-box{text-align:center;margin:16px 0}
+.timer{font-size:66px;font-weight:950;letter-spacing:-.05em;color:var(--orange);line-height:1}
+.timer small{font-size:24px}
+.safety{background:#fff7e9;border:1px solid rgba(233,120,50,.28);border-radius:18px;padding:14px 16px;color:#6b4c2d;font-size:15px;line-height:1.55;margin:12px 0}
+.time-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.time-btn{border:1px solid var(--line);border-radius:16px;background:var(--white);padding:15px 8px;font-size:16px;font-weight:850;color:var(--ink);cursor:pointer}
+.time-btn.selected{background:var(--olive);color:#fff}
+.time-btn.action{background:var(--orange);color:#fff;border-color:var(--orange);font-size:18px}
+.time-btn.action:active{background:#c65c20}
+.result-card{background:linear-gradient(180deg,#fffdf8,#fff3df);border:1px solid rgba(45,36,25,.12);border-radius:30px;padding:24px 20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.result-card:before{content:"";position:absolute;right:-46px;top:-46px;width:150px;height:150px;border-radius:50%;background:rgba(233,120,50,.13)}
+.badge{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff3df;border-radius:999px;padding:9px 14px;font-size:14px;font-weight:900;letter-spacing:.05em}
+.persona{font-size:36px;line-height:1.1;letter-spacing:-.04em;font-weight:950;margin:16px 0 8px}
+.quote{font-size:19px;line-height:1.5;color:var(--ink);font-weight:800;margin:8px 0 16px}
+.agebig{display:flex;align-items:flex-end;gap:10px;margin:16px 0;color:var(--orange)}
+.agebig .num{font-size:66px;line-height:.85;font-weight:950;letter-spacing:-.06em}
+.agebig .unit{font-size:22px;font-weight:900;margin-bottom:4px}
+.radar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
+.dim{text-align:center}
+.circle{width:56px;height:56px;border-radius:50%;margin:0 auto 6px;display:grid;place-items:center;background:conic-gradient(var(--orange) calc(var(--score)*1%),rgba(45,36,25,.1) 0)}
+.circle span{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--green);color:#fff;font-size:14px;font-weight:900}
+.dim label{font-size:14px;font-weight:900;color:var(--muted)}
+.advice{background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:20px;padding:16px;margin-top:14px}
+.advice h3{font-size:18px;margin:0 0 8px}
+.advice p{font-size:16px;line-height:1.6;margin:6px 0;color:var(--ink)}
+.learn-more{background:rgba(255,253,248,.85);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:16px}
+.learn-more h4{font-size:16px;margin:0 0 10px;color:var(--green);font-weight:900}
+.learn-more p{font-size:15px;line-height:1.6;margin:6px 0;color:var(--ink)}
+.learn-more a{display:inline-block;margin-top:8px;color:var(--orange);font-weight:800;text-decoration:none;border-bottom:2px solid var(--orange);padding-bottom:2px}
+.learn-more .hint{font-size:13px;color:var(--muted);margin-top:10px}
+.share-hint{margin:14px 0 0;text-align:center;color:var(--green);font-weight:900;font-size:15px}
+.disclaimer{font-size:12px;line-height:1.5;color:#927b67;margin:14px 4px 0}
+</style>
+</head>
+<body>
+<main class="phone">
+<section id="start" class="screen active">
+  <div class="brand"><span>御祝 Your Joy</span><div class="seal">御祝</div></div>
+  <div class="card">
+    <span class="pill">2分钟 · 6题 + 1个小动作</span>
+    <h1>测测你的<br>体能年龄</h1>
+    <p>同样的岁数，有人爬山，有人上楼就喘。用几个日常场景，看看你的身体，现在几岁。</p>
+    <div class="hero"><div class="big">走·稳<br>力·巧</div><div class="sub">VITALITY INDEX</div></div>
+    <p class="note" style="font-weight:700;color:var(--orange);">还会给你一个专属活力人设</p>
+    <p class="note">结果可截图分享。</p>
+  </div>
+  <div class="cta"><button class="btn" onclick="goAge()">开始测一测</button><div class="note">建议旁边有椅子或墙面。单脚站小动作可跳过，量力而行。</div></div>
+</section>
+
+<section id="age" class="screen">
+  <div class="brand"><span>第一步</span><div class="seal">阅己</div></div>
+  <div class="card">
+    <span class="tag">YOUR AGE</span><h2>请输入你的年龄</h2>
+    <p>精确年龄让体能年龄换算更准确，不会保存个人信息。</p>
+    <input type="number" id="ageInput" class="age-input" placeholder="如 58" min="40" max="99" inputmode="numeric" />
+  </div>
+  <div class="cta"><button class="btn" onclick="confirmAge()">确认，开始测评</button><button class="btn secondary" onclick="show('start')">返回</button></div>
+</section>
+
+<section id="quiz" class="screen">
+  <div class="qtop"><span id="qCount">第1题/共6题</span><span id="qDim" class="tag">走</span></div>
+  <div class="progress"><div id="bar" class="bar"></div></div>
+  <div class="card">
+    <h2 id="qTitle"></h2>
+    <div id="options" class="options"></div>
+  </div>
+</section>
+
+<section id="stand" class="screen">
+  <div class="brand"><span>最后一步</span><div class="seal">稳</div></div>
+  <div class="card">
+    <span class="tag">BALANCE</span><h2>一个小动作：单脚站</h2>
+    <p>扶好墙或椅背旁边，任选一只脚抬起约10厘米。看能稳稳站多久？</p>
+    <div class="safety">安全第一：如果膝盖不适、头晕、站不稳，直接选“跳过”，不要勉强。</div>
+    <div class="timer-box"><div class="timer"><span id="sec">0</span><small>秒</small></div></div>
+    <div class="time-grid">
+      <button class="time-btn action" onclick="startTimer()">▶ 开始计时</button>
+      <button class="time-btn action" onclick="stopTimer()">■ 停止</button>
+      <button class="time-btn" onclick="setStand(8,this)">10秒以内</button>
+      <button class="time-btn" onclick="setStand(15,this)">10-20秒</button>
+      <button class="time-btn" onclick="setStand(30,this)">20-40秒</button>
+      <button class="time-btn" onclick="setStand(50,this)">40秒以上</button>
+    </div>
+  </div>
+  <div class="cta"><button class="btn" onclick="finish()">生成我的结果</button><button class="btn secondary" onclick="setStand(15,null);finish()">跳过，直接看结果</button></div>
+</section>
+
+<section id="result" class="screen">
+  <div class="brand"><span>御祝活力测评</span><div class="seal">悦</div></div>
+  <div class="result-card">
+    <span class="badge" id="level">活力级</span>
+    <div class="persona" id="persona">山野轻骑兵</div>
+    <div class="quote" id="quote"></div>
+    <div class="agebig"><div class="num" id="bodyAge">52</div><div class="unit">岁<br><span style="font-size:14px;color:var(--muted)">体能年龄</span></div></div>
+    <p id="ageLine" style="font-weight:800;color:var(--ink)"></p>
+    <div class="radar" id="radar"></div>
+    <div class="advice"><h3>给你的活力建议</h3><p id="advice"></p></div>
+    <div class="learn-more" id="learnMore" style="display:none">
+      <h4>📚 了解更多</h4>
+      <p id="learnText"></p>
+      <p id="learnArticle"></p>
+      <a href="#" id="learnLink">查看文章</a>
+      <p class="hint">关注【御祝】公众号，每周更新</p>
+    </div>
+    <div class="share-hint">📸 截图保存，分享你的活力人设</div>
+    <div class="disclaimer">体能年龄为四维度综合估算，便于理解的参考数值，非医学测量值。本测评为健康生活方式与运动体能的自我参考工具，不构成医疗诊断、疾病筛查或治疗建议。如有身体不适或疾病史，请咨询专业医生。</div>
+  </div>
+  <div class="cta"><button class="btn green" onclick="restart()">再测一次（换一批题）</button></div>
+</section>
+</main>
+<script>
+// ===== 题库V3生活自理版：每维度3道等效题，每次随机抽1道 =====
+const bank={
+ 力量:[
+  {t:"泡完脚，端着一盆脏水（差不多12-15斤）去倒掉，你通常？",o:[["端得稳，轻松倒掉",4],["能端去倒，稍微有点沉",3],["比较费劲，要很小心不能洒",2],["端不动，需要帮忙",1]]},
+  {t:"把一桶油或一袋米（差不多9-10斤）从地面提到灶台上，你？",o:[["轻松提起来放好",4],["能提上去，稍微用点劲",3],["比较费劲，要调整姿势或分多次",2],["提不上去，需要帮忙",1]]},
+  {t:"做了一锅汤（汤锅加汤差不多8-10斤），端着从灶台端到餐桌，你？",o:[["端得稳，轻松端过去",4],["能端过去，稍微有点沉",3],["比较费劲，要很小心不能洒",2],["端不动，需要帮忙",1]]}
+ ],
+ 起身:[
+  {t:"坐在沙发上看了会儿电视，想起身去倒水，你会？",o:[["不用手撑就站起来了",4],["手在沙发上撑一下就起来了",3],["要调整姿势，或试几次才能起来",2],["得借力好一会儿才起得来",1]]},
+  {t:"坐在饭桌边的椅子上（餐椅），吃完饭站起来，你？",o:[["不用手撑就站起来了",4],["手撑一下桌子或椅子就起来了",3],["要调整姿势，或试几次才能起来",2],["起身比较费劲，需要人帮忙",1]]},
+  {t:"早上睡醒，从床上起身，你通常？",o:[["直接坐起来再站起，不用手撑",4],["手撑一下床垫或床头就起来了",3],["要先翻身侧躺，再慢慢撑起来",2],["起身比较费劲，动作很慢",1]]}
+ ],
+ 步速:[
+  {t:"和家人或朋友一起在外面走路，你通常？",o:[["走在前面，还嫌他们慢",4],["跟得上，节奏差不多",3],["会渐渐落后，得让他们等我",2],["走一会儿就想找地方歇歇",1]]},
+  {t:"出门发现快迟到了（或快赶不上车了），需要加快脚步，你能？",o:[["快走甚至小跑一段没问题",4],["能加快步速，但跑不了",3],["只能稍微快一点",2],["基本加不了速，宁愿晚点",1]]},
+  {t:"和同龄的朋友、邻居一起走路时，你的速度？",o:[["明显比他们快",4],["差不多，跟得上",3],["偏慢一些，跟着有点吃力",2],["明显慢，经常要他们等我",1]]}
+ ],
+ 耐力:[
+  {t:"能连续走多久不觉得累？",o:[["一个小时都没问题",4],["半小时左右挺轻松",3],["十几分钟就想歇",2],["走几分钟腿就发沉",1]]},
+  {t:"和朋友一起逛街、逛公园，你通常？",o:[["逛一两个小时都不累",4],["逛半小时到一小时挺舒服",3],["逛十几分钟就想找地方坐坐",2],["不太愿意逛，走一会儿就累",1]]},
+  {t:"做饭炒菜，站着在厨房忙活（洗菜、切菜、炒菜），你通常能站多久不觉得累？",o:[["站一个小时做一桌菜都没问题",4],["站半小时左右挺轻松",3],["站十几分钟就想歇一下",2],["站一会儿就腰酸腿疼",1]]}
+ ],
+ 平衡:[
+  {t:"早上穿鞋出门，你通常？",o:[["站着穿，不用扶东西",4],["站着穿，手扶一下墙或门框",3],["需要坐下来穿才稳当",2],["坐下来穿，而且要很小心",1]]},
+  {t:"洗澡时，你通常？",o:[["站着洗全身，很稳",4],["站着洗，偶尔扶一下墙",3],["需要坐在小凳子上洗",2],["必须坐着洗才安全",1]]},
+  {t:"小区里的石板路、公园的碎石道，走在这种路上，你会？",o:[["正常走，不需要特别留意",4],["走得稍慢一点，但很稳",3],["要很小心，怕踩不稳",2],["尽量避开，或要人扶着",1]]}
+ ],
+ 握力:[
+  {t:"拧开新的矿泉水瓶盖、饮料瓶盖这种事，你通常？",o:[["轻松拧开，一点不费劲",4],["用点力气就开了",3],["得试几次，或让手掌不打滑才行",2],["经常拧不开，要让别人帮忙",1]]},
+  {t:"洗完毛巾或抹布，拧干水，你觉得？",o:[["轻松拧干",4],["能拧干，稍微用点劲",3],["拧得不太干，手会酸",2],["拧不动，或让别人帮忙",1]]},
+  {t:"拿菜刀切菜（比如切土豆丝、切肉），你觉得？",o:[["刀拿得稳，切得利落",4],["能切，稍微握久了手会酸",3],["握不太稳，或切一会儿就得歇",2],["握不住刀，或不敢切硬的东西",1]]}
+ ]
+};
+// 维度分组：行动(步速+耐力) 力量(力量+起身) 平衡(平衡+单脚站) 抓握(握力)
+const dimGroups=[
+ {key:"力量",label:"力量"},{key:"起身",label:"力量"},
+ {key:"步速",label:"行动"},{key:"耐力",label:"行动"},
+ {key:"平衡",label:"平衡"},{key:"握力",label:"抓握"}
+];
+// 人设库（匹配新维度名：行动/平衡/力量/抓握）
+const personas=[
+ {name:"行动派",badge:"能走",best:"行动",quote:"你的身体里，住着一个想继续出发的人。"},
+ {name:"稳健派",badge:"站得稳",best:"平衡",quote:"不慌不忙，但每一步都很有掌控感。"},
+ {name:"力量派",badge:"有劲",best:"力量",quote:"你的活力藏在每一次提起、每一次站起里。"},
+ {name:"灵巧派",badge:"手灵活",best:"抓握",quote:"生活里的小事，你总能处理得利落又漂亮。"}
+];
+let state={age:60,pick:[],answers:[],stand:15,timer:null,startedAt:null};
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0)}
+function pickRandom(){state.pick=dimGroups.map(g=>{const arr=bank[g.key];const q=arr[Math.floor(Math.random()*arr.length)];return{label:g.label,t:q.t,o:q.o}})}
+function goAge(){show('age');setTimeout(()=>document.getElementById('ageInput').focus(),300)}
+function confirmAge(){const v=parseInt(document.getElementById('ageInput').value,10);if(!v||v<40||v>99){alert('请输入40-99之间的年龄');return}state.age=v;state.answers=[];pickRandom();renderQ(0);show('quiz')}
+function renderQ(i){const q=state.pick[i];document.getElementById('qCount').textContent=`第${i+1}题/共6题`;document.getElementById('qDim').textContent=q.label;document.getElementById('bar').style.width=(i/6*100)+'%';document.getElementById('qTitle').textContent=q.t;const box=document.getElementById('options');box.innerHTML='';q.o.forEach((op,idx)=>{const b=document.createElement('button');b.className='option';b.innerHTML=`<div class="letter">${String.fromCharCode(65+idx)}</div><div class="option-text">${op[0]}</div>`;b.onclick=()=>{state.answers[i]={label:q.label,v:op[1]};if(i<5){renderQ(i+1)}else{document.getElementById('bar').style.width='100%';show('stand')}};box.appendChild(b)})}
+function startTimer(){clearInterval(state.timer);state.startedAt=Date.now();document.getElementById('sec').textContent='0';state.timer=setInterval(()=>{let s=Math.floor((Date.now()-state.startedAt)/1000);document.getElementById('sec').textContent=s;if(s>=90)stopTimer()},250)}
+function stopTimer(){if(state.timer){clearInterval(state.timer);state.timer=null}const s=parseInt(document.getElementById('sec').textContent||'0',10);if(s>0)state.stand=s}
+function setStand(v,el){state.stand=v;document.getElementById('sec').textContent=v;if(el){document.querySelectorAll('.time-btn').forEach(x=>x.classList.remove('selected'));el.classList.add('selected')}}
+function finish(){stopTimer();calc();show('result')}
+function scoreStand(s){if(s>=40)return 4;if(s>=20)return 3;if(s>=10)return 2;return 1}
+function avg(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:2.5}
+function calc(){
+ const g={行动:[],力量:[],平衡:[],抓握:[]};
+ state.answers.forEach(a=>g[a.label].push(a.v));
+ // 平衡维度并入单脚站实测
+ let sc={
+  行动:avg(g.行动),
+  力量:avg(g.力量),
+  平衡:(avg(g.平衡)*.55+scoreStand(state.stand)*.45),
+  抓握:avg(g.抓握)
+ };
+ // 体能年龄：行动25% 力量35% 平衡25% 抓握15%
+ let total=sc.行动*.25+sc.力量*.35+sc.平衡*.25+sc.抓握*.15;
+ let diff=Math.round((total-2.5)*5.2);
+ let bodyAge=Math.max(38,Math.round(state.age-diff));
+ let best=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0][0];
+ let p=personas.find(x=>x.best===best)||personas[0];
+ let level=diff>=5?'生活自理优秀':diff<=-4?'需要关注':'生活自理良好';
+ document.getElementById('level').textContent=level+' · '+p.badge;
+ document.getElementById('persona').textContent=p.name;
+ document.getElementById('quote').textContent=p.quote;
+ document.getElementById('bodyAge').textContent=bodyAge;
+ document.getElementById('ageLine').textContent=diff>0?`比实际年龄年轻约 ${diff} 岁`:diff<0?`比实际年龄偏大约 ${Math.abs(diff)} 岁，有很好的提升空间`:'接近实际年龄，状态稳定';
+ let weak=Object.entries(sc).sort((a,b)=>a[1]-b[1])[0][0];
+ const adv={行动:'建议从每天多走10分钟开始，选平整的绿道或公园，保持能说话但微微出汗的节奏。',力量:'建议做温和的起坐、半蹲练习，少量多组，先求动作稳，再求次数。',平衡:'建议在安全环境里练穿鞋站立、扶椅单脚站，旁边一定要有支撑物。',抓握:'建议每天做握捏练习，拧毛巾、握软球等小练习，让手部保持力量。'};
+ document.getElementById('advice').textContent=(total>=3.6?'保持现在的好状态，给自己定个”3个月后再测”的小目标。':'先从最容易坚持的一项开始。')+' '+adv[weak];
+ const box=document.getElementById('radar');box.innerHTML='';['行动','平衡','力量','抓握'].forEach(k=>{let pct=Math.round(sc[k]/4*100);const d=document.createElement('div');d.className='dim';d.innerHTML=`<div class=”circle” style=”--score:${pct}”><span>${Math.round(sc[k]*25)}</span></div><label>${k}</label>`;box.appendChild(d)});
+}
+function restart(){state={age:60,pick:[],answers:[],stand:15,timer:null,startedAt:null};show('start')}
+</script>
+</body>
+</html>
